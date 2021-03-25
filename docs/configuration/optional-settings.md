@@ -555,3 +555,10 @@ SHORT_TIME_FORMAT = 'H:i:s'          # 13:23:00
 DATETIME_FORMAT = 'N j, Y g:i a'     # June 26, 2016 1:23 p.m.
 SHORT_DATETIME_FORMAT = 'Y-m-d H:i'  # 2016-06-26 13:23
 ```
+
+## IPAM_MAX_RESERVABLE_IPS
+
+Default: 10
+
+Controls how many maximum available IPs will be reserved for a single call to
+`POST /ipam/prefixes/{id}/available-ips/`.

@@ -1,6 +1,7 @@
 import json
 
 from django.urls import reverse
+from django.conf import settings
 from netaddr import IPNetwork
 from rest_framework import status
 
@@ -356,6 +357,19 @@ class PrefixTest(APIViewTestCases.APIViewTestCase):
         response = self.client.post(url, data, format='json', **self.header)
         self.assertHttpStatus(response, status.HTTP_201_CREATED)
         self.assertEqual(len(response.data), 8)
+
+    def test_reserve_too_much_available_ips(self):
+        """
+        Test that reserving too many available IPs per request is forbidden
+        """
+        prefix = Prefix.objects.create(prefix=IPNetwork('10.0.0.0/16'), is_pool=True)
+        url = reverse('ipam-api:prefix-available-ips', kwargs={'pk': prefix.pk})
+        self.add_permissions('ipam.view_prefix', 'ipam.add_ipaddress')
+
+        data = [{'description': f'Test IP {i}'} for i in range(0, settings.IPAM_MAX_RESERVABLE_IPS + 1)]
+        response = self.client.post(url, data, format='json', **self.header)
+        self.assertHttpStatus(response, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('requested_ips', response.data)
 
 
 class IPAddressTest(APIViewTestCases.APIViewTestCase):

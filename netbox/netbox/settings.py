@@ -120,6 +120,7 @@ SHORT_DATETIME_FORMAT = getattr(configuration, 'SHORT_DATETIME_FORMAT', 'Y-m-d H
 SHORT_TIME_FORMAT = getattr(configuration, 'SHORT_TIME_FORMAT', 'H:i:s')
 TIME_FORMAT = getattr(configuration, 'TIME_FORMAT', 'g:i a')
 TIME_ZONE = getattr(configuration, 'TIME_ZONE', 'UTC')
+IPAM_MAX_RESERVABLE_IPS = getattr(configuration, 'IPAM_MAX_RESERVABLE_IPS', 10)
 
 # Validate update repo URL and timeout
 if RELEASE_CHECK_URL:

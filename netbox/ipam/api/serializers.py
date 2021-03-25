@@ -1,6 +1,7 @@
 from collections import OrderedDict
 
 from django.contrib.contenttypes.models import ContentType
+from django.conf import settings
 from drf_yasg.utils import swagger_serializer_method
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
@@ -230,9 +231,16 @@ class AvailablePrefixSerializer(serializers.Serializer):
         ])
 
 
+class RequestedIPSerializer(serializers.Serializer):
+    requested_ips = serializers.ListField(
+        child=serializers.DictField(child=serializers.CharField(), allow_empty=True),
+        max_length=settings.IPAM_MAX_RESERVABLE_IPS,
+    )
+
 #
 # IP addresses
 #
+
 
 class IPAddressSerializer(TaggedObjectSerializer, CustomFieldModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='ipam-api:ipaddress-detail')

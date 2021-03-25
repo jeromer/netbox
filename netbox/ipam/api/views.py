@@ -201,9 +201,11 @@ class PrefixViewSet(CustomFieldModelViewSet):
 
         # Create the next available IP within the prefix
         if request.method == 'POST':
-
             # Normalize to a list of objects
             requested_ips = request.data if isinstance(request.data, list) else [request.data]
+
+            s = serializers.RequestedIPSerializer(data={'requested_ips': requested_ips})
+            s.is_valid(raise_exception=True)
 
             # Determine if the requested number of IPs is available
             available_ips = prefix.get_available_ips()
